@@ -30,9 +30,13 @@ QMAKE_POST_LINK += $$CP_CMD
 LIBS += -lsfml-system -lsfml-window -lsfml-graphics
 
 SOURCES += src/main.cpp \
-    src/level.cpp \
-    lib/tinyxml2/tinyxml2.cpp
+    lib/tinyxml2/tinyxml2.cpp \
+    src/TmxLevel.cpp \
+    src/GameView.cpp \
+    src/GameScene.cpp
 
 HEADERS += \
-    src/level.h \
-    lib/tinyxml2/tinyxml2.h
+    lib/tinyxml2/tinyxml2.h \
+    src/TmxLevel.h \
+    src/GameView.h \
+    src/GameScene.h

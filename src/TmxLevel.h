@@ -5,35 +5,40 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 
-struct Object
+struct TmxObject
 {
     int GetPropertyInt(std::string name);
     float GetPropertyFloat(std::string name);
     std::string GetPropertyString(std::string name);
 
+    void MoveBy(const sf::Vector2f &movement);
+    void MoveTo(const sf::Vector2f &position);
+
     std::string name;
     std::string type;
-    sf::Rect<int> rect;
+    sf::IntRect rect;
     std::map<std::string, std::string> properties;
 
 	sf::Sprite sprite;
 };
 
-struct Layer
+struct TmxLayer
 {
     int opacity;
     std::vector<sf::Sprite> tiles;
 };
 
-class Level
+class TmxLevel
 {
 public:
     bool LoadFromFile(const std::string &filepath);
 
-    Object GetObject(const std::string &name)const;
-    std::vector<Object> GetObjects(const std::string &name)const;
-    void Draw(sf::RenderWindow &window)const;
+    TmxObject GetObject(const std::string &name)const;
+    std::vector<TmxObject> GetObjects(const std::string &name)const;
     sf::Vector2i GetTileSize()const;
+
+    // Принимает любую цель для рисования, например, sf::RenderWindow.
+    void Draw(sf::RenderTarget &target)const;
 
 private:
     int m_width;
@@ -41,8 +46,8 @@ private:
     int m_tileWidth;
     int m_tileHeight;
     int m_firstTileID;
-    sf::Rect<float> m_drawingBounds;
+    sf::FloatRect m_drawingBounds;
     sf::Texture m_tilesetImage;
-    std::vector<Object> m_objects;
-    std::vector<Layer> m_layers;
+    std::vector<TmxObject> m_objects;
+    std::vector<TmxLayer> m_layers;
 };
