@@ -40,12 +40,15 @@ struct TmxLayer
 class TmxLevel
 {
 public:
+    // Загружает данные из TMX в память объекта.
     bool LoadFromFile(const std::string &filepath);
 
-    TmxObject GetObject(const std::string &name)const;
-    std::vector<TmxObject> GetObjects(const std::string &name)const;
+    TmxObject GetFirstObject(const std::string &name)const;
+    std::vector<TmxObject> GetAllObjects(const std::string &name)const;
     sf::Vector2i GetTileSize()const;
 
+    // Рисует все слои тайлов один за другим,
+    //  но не рисует объекты (рисованием которых должна заниматься игра).
     // Принимает любую цель для рисования, например, sf::RenderWindow.
     void Draw(sf::RenderTarget &target)const;
 

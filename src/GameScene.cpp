@@ -62,9 +62,9 @@ GameScene *NewGameScene()
     TmxLevel &level = pLogic->level;
 
     level.LoadFromFile("res/platformer.tmx");
-    pLogic->player = level.GetObject("player");
-    pLogic->coins = level.GetObjects("coin");
-    pLogic->enemies = level.GetObjects("enemy");
+    pLogic->player = level.GetFirstObject("player");
+    pLogic->coins = level.GetAllObjects("coin");
+    pLogic->enemies = level.GetAllObjects("enemy");
 
     return pLogic;
 }

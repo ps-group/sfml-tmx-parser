@@ -342,7 +342,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     return true;
 }
 
-TmxObject TmxLevel::GetObject(const std::string &name)const
+TmxObject TmxLevel::GetFirstObject(const std::string &name)const
 {
     // Only first object with given name
     for (size_t i = 0; i < m_objects.size(); i++)
@@ -351,7 +351,7 @@ TmxObject TmxLevel::GetObject(const std::string &name)const
     throw std::runtime_error("Object with name " + name + " was not found");
 }
 
-std::vector<TmxObject> TmxLevel::GetObjects(const std::string &name)const
+std::vector<TmxObject> TmxLevel::GetAllObjects(const std::string &name)const
 {
     // All objects with given name
     std::vector<TmxObject> vec;
