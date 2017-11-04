@@ -9,7 +9,7 @@ using sf::Vector2f;
 using sf::Vector2i;
 
 // Абсолютная скорость движения игрока.
-static const float PLAYER_SPEED = 4;
+static const float PLAYER_SPEED = 200;
 
 // Выполняет нормализацию вектора (приведение к единичной длине).
 static Vector2f Normalize(const Vector2f &value)
@@ -74,7 +74,7 @@ void UpdateGameScene(void *pData, GameView &view, float deltaSec)
     (void)deltaSec;
 
     TmxObject &player = pLogic->player;
-    const Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED);
+    const Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
     player.MoveBy(movement);
 
     const Vector2i windowSize = view.windowSize;
