@@ -9,6 +9,9 @@ int main(int argc, char *argv[])
 
     try
     {
+        // NOTE: Если при загрузке карты будет выброшено исключение,
+        //  то память утечёт. Избавиться от этого можно с помощью
+        //  замены new/delete на make_unique и unique_ptr.
         GameView *pGameView = NewGameView({800, 600});
         GameScene *pGameScene = NewGameScene();
 
