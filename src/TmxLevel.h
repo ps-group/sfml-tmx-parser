@@ -12,19 +12,19 @@
 //  использующий основную текстуру карты как источник данных.
 struct TmxObject
 {
-    int GetPropertyInt(std::string name);
-    float GetPropertyFloat(std::string name);
-    std::string GetPropertyString(std::string name);
+    int GetPropertyInt(std::string propertyName);
+    float GetPropertyFloat(std::string propertyName);
+    std::string GetPropertyString(std::string propertyName);
 
     void MoveBy(const sf::Vector2f &movement);
     void MoveTo(const sf::Vector2f &position);
 
     std::string name;
     std::string type;
-    sf::IntRect rect;
+    sf::FloatRect rect;
     std::map<std::string, std::string> properties;
 
-	sf::Sprite sprite;
+    sf::Sprite sprite;
 };
 
 // В картах TMX слой - это набор тайлов (спрайтов),
@@ -33,26 +33,29 @@ struct TmxObject
 //  например, слой травы поверх слоя земли.
 struct TmxLayer
 {
-    int opacity = 0;
+    sf::Uint8 opacity = 0;
     std::vector<sf::Sprite> tiles;
 };
 
 class TmxLevel
 {
-public:
+  public:
     // Загружает данные из TMX в память объекта.
     bool LoadFromFile(const std::string &filepath);
 
-    TmxObject GetFirstObject(const std::string &name)const;
-    std::vector<TmxObject> GetAllObjects(const std::string &name)const;
-    sf::Vector2i GetTileSize()const;
+    TmxObject GetFirstObject(const std::string &name) const;
+    std::vector<TmxObject> GetAllObjects(const std::string &name) const;
+    sf::Vector2i GetTileSize() const;
+    float GetTilemapWidth() const;
+    float GetTilemapHeight() const;
+    sf::Vector2f GetTilemapSize() const;
 
     // Рисует все слои тайлов один за другим,
     //  но не рисует объекты (рисованием которых должна заниматься игра).
     // Принимает любую цель для рисования, например, sf::RenderWindow.
-    void Draw(sf::RenderTarget &target)const;
+    void Draw(sf::RenderTarget &target) const;
 
-private:
+  private:
     int m_width = 0;
     int m_height = 0;
     int m_tileWidth = 0;

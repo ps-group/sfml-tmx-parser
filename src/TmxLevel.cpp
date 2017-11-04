@@ -69,19 +69,19 @@ float ParseFloat(const std::string &str)
     return value;
 }
 
-int TmxObject::GetPropertyInt(std::string name)
+int TmxObject::GetPropertyInt(std::string propertyName)
 {
-    return std::stoi(properties[name].c_str());
+    return std::stoi(properties[propertyName].c_str());
 }
 
-float TmxObject::GetPropertyFloat(std::string name)
+float TmxObject::GetPropertyFloat(std::string propertyName)
 {
-    return ParseFloat(properties[name].c_str());
+    return ParseFloat(properties[propertyName].c_str());
 }
 
-std::string TmxObject::GetPropertyString(std::string name)
+std::string TmxObject::GetPropertyString(std::string propertyName)
 {
-    return properties[name];
+    return properties[propertyName];
 }
 
 void TmxObject::MoveBy(const sf::Vector2f &movement)
@@ -131,7 +131,12 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     XMLElement *image = tilesetElement->FirstChildElement("image");
     const std::string imageFilename = image->Attribute("source");
     const std::string imagePath = JoinPaths(GetParentDirectory(filepath), imageFilename);
-    const sf::Color matteColor = ParseColor(image->Attribute("trans"));
+
+    sf::Color matteColor = sf::Color(0, 0, 0, 0);
+    if (image->Attribute("trans") != nullptr)
+    {
+        matteColor = ParseColor(image->Attribute("trans"));
+    }
 
     sf::Image img;
     if (!img.loadFromFile(imagePath))
@@ -153,7 +158,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     const int rows = m_tilesetImage.getSize().y / m_tileHeight;
 
     // Collect texture rects list.
-    //  Each texture rect is subimage in tileset image, i.e. single tile image.
+    // Each texture rect is subimage in tileset image, i.e. single tile image.
     std::vector<sf::IntRect> subRects;
     for (int y = 0; y < rows; y++)
     {
@@ -181,7 +186,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
         if (layerElement->Attribute("opacity") != nullptr)
         {
             float opacity = ParseFloat(layerElement->Attribute("opacity"));
-            layer.opacity = 255 * opacity;
+            layer.opacity = sf::Uint8(255 * opacity);
         }
         else
         {
@@ -216,7 +221,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 sf::Sprite sprite;
                 sprite.setTexture(m_tilesetImage);
                 sprite.setTextureRect(subRects[subRectToUse]);
-                sprite.setPosition(x * m_tileWidth, y * m_tileHeight);
+                sprite.setPosition(static_cast<float>(x * m_tileWidth), static_cast<float>(y * m_tileHeight));
                 sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
 
                 layer.tiles.push_back(sprite);
@@ -268,10 +273,10 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 {
                     objectName = objectElement->Attribute("name");
                 }
-                int x = std::stoi(objectElement->Attribute("x"));
-                int y = std::stoi(objectElement->Attribute("y"));
-                int width = 0;
-                int height = 0;
+                float x = std::stof(objectElement->Attribute("x"));
+                float y = std::stof(objectElement->Attribute("y"));
+                float width = 0;
+                float height = 0;
 
                 sf::Sprite sprite;
                 sprite.setTexture(m_tilesetImage);
@@ -280,14 +285,14 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
 
                 if (objectElement->Attribute("width") != nullptr)
                 {
-                    width = std::stoi(objectElement->Attribute("width"));
-                    height = std::stoi(objectElement->Attribute("height"));
+                    width = std::stof(objectElement->Attribute("width"));
+                    height = std::stof(objectElement->Attribute("height"));
                 }
                 else
                 {
                     const size_t index = std::stoi(objectElement->Attribute("gid")) - m_firstTileID;
-                    width = subRects[index].width;
-                    height = subRects[index].height;
+                    width = static_cast<float>(subRects[index].width);
+                    height = static_cast<float>(subRects[index].height);
                     sprite.setTextureRect(subRects[index]);
                     sprite.setOrigin(0, height);
                 }
@@ -298,7 +303,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 object.type = objectType;
                 object.sprite = sprite;
 
-                sf::IntRect objectRect;
+                sf::FloatRect objectRect;
                 objectRect.top = y;
                 objectRect.left = x;
                 objectRect.height = height;
@@ -367,6 +372,21 @@ std::vector<TmxObject> TmxLevel::GetAllObjects(const std::string &name) const
 sf::Vector2i TmxLevel::GetTileSize() const
 {
     return sf::Vector2i(m_tileWidth, m_tileHeight);
+}
+
+float TmxLevel::GetTilemapWidth() const
+{
+    return static_cast<float>(m_tileWidth * m_width);
+}
+
+float TmxLevel::GetTilemapHeight() const
+{
+    return static_cast<float>(m_tileHeight * m_height);
+}
+
+sf::Vector2f TmxLevel::GetTilemapSize() const
+{
+    return sf::Vector2f(GetTilemapWidth(), GetTilemapHeight());
 }
 
 void TmxLevel::Draw(sf::RenderTarget &target) const
