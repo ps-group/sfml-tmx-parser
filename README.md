@@ -1,5 +1,7 @@
 ## Tiled Map Editor loader for SFML
 
+![Screenshot](img/game.png)
+
 This repository contains:
 
 - `src/TmxLevel.h` and `src/TmxLevel.cpp` &mdash; `*.tmx` file parser

@@ -3,9 +3,7 @@
 #include <iostream>
 #include "../lib/tinyxml2/tinyxml2.h"
 
-
 using namespace tinyxml2;
-
 
 // On Windows, backslash '\\' is directory separator in paths
 // On UNIX paths separated with slash '/'.
@@ -105,7 +103,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     XMLDocument levelFile;
 
     // Load XML into in-memory XMLDocument.
-    if(levelFile.LoadFile(filepath.c_str()) != XML_SUCCESS)
+    if (levelFile.LoadFile(filepath.c_str()) != XML_SUCCESS)
     {
         throw std::runtime_error("Loading level \"" + filepath + "\" failed.");
     }
@@ -135,7 +133,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     const std::string imagePath = JoinPaths(GetParentDirectory(filepath), imageFilename);
     const sf::Color matteColor = ParseColor(image->Attribute("trans"));
 
-	sf::Image img;
+    sf::Image img;
     if (!img.loadFromFile(imagePath))
     {
         std::cout << "Failed to load tile sheet." << std::endl;
@@ -174,10 +172,10 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     /// Parse tile layers
     ///
     XMLElement *layerElement = map->FirstChildElement("layer");
-    while(layerElement)
+    while (layerElement)
     {
         TmxLayer layer;
-		
+
         // Copy transparency if it set in XML,
         //  or make layer opaque (255).
         if (layerElement->Attribute("opacity") != nullptr)
@@ -207,7 +205,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
 
         int x = 0;
         int y = 0;
-        while(tileElement)
+        while (tileElement)
         {
             const int tileGID = std::stoi(tileElement->Attribute("gid"));
             const int subRectToUse = tileGID - m_firstTileID;
@@ -217,7 +215,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
             {
                 sf::Sprite sprite;
                 sprite.setTexture(m_tilesetImage);
-				sprite.setTextureRect(subRects[subRectToUse]);
+                sprite.setTextureRect(subRects[subRectToUse]);
                 sprite.setPosition(x * m_tileWidth, y * m_tileHeight);
                 sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
 
@@ -256,8 +254,8 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
             // Enter into <object> node
             XMLElement *objectElement;
             objectElement = objectGroupElement->FirstChildElement("object");
-           
-			while(objectElement)
+
+            while (objectElement)
             {
                 // Collecting object properties - type, name, position, etc.
                 std::string objectType;
@@ -275,36 +273,36 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 int width = 0;
                 int height = 0;
 
-				sf::Sprite sprite;
+                sf::Sprite sprite;
                 sprite.setTexture(m_tilesetImage);
-                sprite.setTextureRect(sf::IntRect(0,0,0,0));
+                sprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
                 sprite.setPosition(x, y);
 
                 if (objectElement->Attribute("width") != nullptr)
-				{
+                {
                     width = std::stoi(objectElement->Attribute("width"));
                     height = std::stoi(objectElement->Attribute("height"));
-				}
-				else
-				{
+                }
+                else
+                {
                     const size_t index = std::stoi(objectElement->Attribute("gid")) - m_firstTileID;
                     width = subRects[index].width;
                     height = subRects[index].height;
                     sprite.setTextureRect(subRects[index]);
                     sprite.setOrigin(0, height);
-				}
+                }
 
                 // Define object
                 TmxObject object;
                 object.name = objectName;
                 object.type = objectType;
-				object.sprite = sprite;
+                object.sprite = sprite;
 
                 sf::IntRect objectRect;
                 objectRect.top = y;
                 objectRect.left = x;
-				objectRect.height = height;
-				objectRect.width = width;
+                objectRect.height = height;
+                objectRect.width = width;
                 object.rect = objectRect;
 
                 // Read object properties
@@ -342,7 +340,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     return true;
 }
 
-TmxObject TmxLevel::GetFirstObject(const std::string &name)const
+TmxObject TmxLevel::GetFirstObject(const std::string &name) const
 {
     // Only first object with given name
     for (size_t i = 0; i < m_objects.size(); i++)
@@ -351,23 +349,27 @@ TmxObject TmxLevel::GetFirstObject(const std::string &name)const
     throw std::runtime_error("Object with name " + name + " was not found");
 }
 
-std::vector<TmxObject> TmxLevel::GetAllObjects(const std::string &name)const
+std::vector<TmxObject> TmxLevel::GetAllObjects(const std::string &name) const
 {
     // All objects with given name
     std::vector<TmxObject> vec;
     for (size_t i = 0; i < m_objects.size(); i++)
+    {
         if (m_objects[i].name == name)
+        {
             vec.push_back(m_objects[i]);
+        }
+    }
 
-	return vec;
+    return vec;
 }
 
-sf::Vector2i TmxLevel::GetTileSize()const
+sf::Vector2i TmxLevel::GetTileSize() const
 {
     return sf::Vector2i(m_tileWidth, m_tileHeight);
 }
 
-void TmxLevel::Draw(sf::RenderTarget &target)const
+void TmxLevel::Draw(sf::RenderTarget &target) const
 {
     const sf::FloatRect viewportRect = target.getView().getViewport();
 
