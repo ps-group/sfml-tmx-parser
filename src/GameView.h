@@ -21,8 +21,8 @@ struct GameView
 ///  вызываемые из основного цикла игры для совершения игровой логики.
 /// Параметр userData - произвольный указатель на внешние данные того,
 ///  кто предоставляет колбек.
-using OnUpdate = void(*)(void *pData, GameView &view, float deltaSec);
-using OnDraw = void(*)(void *pData, GameView &view);
+using OnUpdate = void (*)(void *pData, GameView &view, float deltaSec);
+using OnDraw = void (*)(void *pData, GameView &view);
 
 /// Создаёт новое окно игры.
 GameView *NewGameView(const sf::Vector2i &windowSize);

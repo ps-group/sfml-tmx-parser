@@ -12,9 +12,9 @@
 //  использующий основную текстуру карты как источник данных.
 struct TmxObject
 {
-    int GetPropertyInt(std::string propertyName);
-    float GetPropertyFloat(std::string propertyName);
-    std::string GetPropertyString(std::string propertyName);
+    int GetPropertyInt(const std::string &propertyName);
+    float GetPropertyFloat(const std::string &propertyName);
+    std::string GetPropertyString(const std::string &propertyName);
 
     void MoveBy(const sf::Vector2f &movement);
     void MoveTo(const sf::Vector2f &position);

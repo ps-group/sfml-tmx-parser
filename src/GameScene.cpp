@@ -3,12 +3,10 @@
 #include <float.h> // Константа FLT_EPSILON
 #include <math.h>
 
-
 // Добавим часто используемые идентификаторы в глобальное пространство имён.
 using sf::Keyboard;
 using sf::Vector2f;
 using sf::Vector2i;
-
 
 // Абсолютная скорость движения игрока.
 static const float PLAYER_SPEED = 4;
@@ -72,7 +70,7 @@ GameScene *NewGameScene()
 void UpdateGameScene(void *pData, GameView &view, float deltaSec)
 {
     // Извлекаем указатель на GameLogic, ранее переданный в игровой цикл.
-    GameScene *pLogic = reinterpret_cast<GameScene*>(pData);
+    GameScene *pLogic = reinterpret_cast<GameScene *>(pData);
     (void)deltaSec;
 
     TmxObject &player = pLogic->player;
@@ -86,7 +84,7 @@ void UpdateGameScene(void *pData, GameView &view, float deltaSec)
 void DrawGameScene(void *pData, GameView &view)
 {
     // Извлекаем указатель на GameLogic, ранее переданный в игровой цикл.
-    GameScene *pLogic = reinterpret_cast<GameScene*>(pData);
+    GameScene *pLogic = reinterpret_cast<GameScene *>(pData);
     sf::RenderTarget &target = view.window;
 
     pLogic->level.Draw(target);

@@ -69,17 +69,17 @@ float ParseFloat(const std::string &str)
     return value;
 }
 
-int TmxObject::GetPropertyInt(std::string propertyName)
+int TmxObject::GetPropertyInt(const std::string &propertyName)
 {
     return std::stoi(properties[propertyName].c_str());
 }
 
-float TmxObject::GetPropertyFloat(std::string propertyName)
+float TmxObject::GetPropertyFloat(const std::string &propertyName)
 {
     return ParseFloat(properties[propertyName].c_str());
 }
 
-std::string TmxObject::GetPropertyString(std::string propertyName)
+std::string TmxObject::GetPropertyString(const std::string &propertyName)
 {
     return properties[propertyName];
 }

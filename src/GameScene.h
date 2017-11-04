@@ -11,7 +11,6 @@ struct GameView;
 ///  Код ниже намеренно написан в процедурном стиле:
 ///  - используются структуры
 ///  - используется явный вызов new и delete.
-
 struct GameScene
 {
     TmxLevel level;
